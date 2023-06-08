@@ -24,3 +24,4 @@ function animate() {
     c.fillRect(x, 320, 75, 75)
     x++
 }
+// test
