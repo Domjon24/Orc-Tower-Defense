@@ -18,6 +18,10 @@ class Enemy {
         this.width = 75
         this.height = 75
         this.waypointIndex = 0
+        this.center = {
+            x: this.position.x + this.width /2,
+            y: this.position.x + this.height /2
+        }
     }
     draw() {
         c.fillStyle = 'purple'
@@ -28,15 +32,19 @@ class Enemy {
         this.draw()
 
         const waypoint = waypoints[this.waypointIndex];
-        const yDistance = waypoint.y - this.position.y;  // y distance must be first
-        const xDistance = waypoint.x - this.position.x
+        const yDistance = waypoint.y - this.center.y;  // y distance must be first
+        const xDistance = waypoint.x - this.center.x
         const angle = Math.atan2(yDistance, xDistance)
         this.position.x += Math.cos(angle)
         this.position.y += Math.sin(angle)
+        this.center = {
+            x: this.position.x + this.width / 2,
+            y: this.position.y + this.height / 2 // the /2 operator gets the waypoints of the center of the square, rather than where it was drawn
+        }
         
         if (
-            Math.round(this.position.x) === Math.round(waypoint.x) &&
-            Math.round(this.position.y) === Math.round(waypoint.y) &&
+            Math.round(this.center.x) === Math.round(waypoint.x) &&
+            Math.round(this.center.y) === Math.round(waypoint.y) &&
             this.waypointIndex < waypoints.length - 1
           ) {
             this.waypointIndex++
@@ -45,13 +53,21 @@ class Enemy {
       }
 
 /* animation */
-const enemy = new Enemy({position: { x: waypoints[0].x, y: waypoints[0].y} });
-const enemy2 = new Enemy({position: { x: waypoints[0].x - 100, y: waypoints[0].y - 100} });
+const enemyArr = [];
+
+for (let i = 1; i < 11; i++) {
+    const xOffset = i * 150
+    enemyArr.push(new Enemy({
+        position: {x: waypoints[0].x - xOffset, y: waypoints[0].y}
+       
+    }))
+}
 
 function animate() {
     requestAnimationFrame (animate)
     c.drawImage(image, 0, 0)
-    enemy.update()
-    enemy2.update()
+    enemyArr.forEach((enemy) => {
+        enemy.update()
+    })
 }
 // 
