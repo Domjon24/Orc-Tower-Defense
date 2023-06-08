@@ -1,9 +1,4 @@
-const waypoints =
-[
-    {
-     "x":0,
-     "y":0
-    }, 
+const waypoints =[
     {
      "x":-50,
      "y":350
