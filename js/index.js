@@ -5,54 +5,35 @@ canvas.width = "1280"
 canvas.height = "768"
 c.fillStyle = 'white'
 c.fillRect(0, 0, canvas.width, canvas.height)
+const placementTilesData2D = []
+const placementTiles = []
+        for (let i = 0; i < placementTilesData.length; i+= 20) {
+            placementTilesData2D.push(placementTilesData.slice(i, i + 20))
+        }
+
+        placementTilesData2D.forEach((row, y) => {
+            row.forEach((symbol, x) => {
+                if (symbol === 14 ) {
+                    // add building placement tile here
+                    placementTiles.push(new PlacementTilesClass({
+                        position: {
+                            x: x * 64,
+                            y: y * 64
+                        }
+                    })
+                    )
+                }
+            })
+        })
+    console.log(placementTiles)
 const image = new Image()
 image.onload = () => { 
     animate()
 }
+
 image.src = 'img/Tower Defense Map.png'
 
-// enemy class, with all nessecary properties
-class Enemy {
-    constructor({ position = { x: 0, y: 0 } }) {
-        this.position = position
-        this.width = 75
-        this.height = 75
-        this.waypointIndex = 0
-        this.center = {
-            x: this.position.x + this.width /2,
-            y: this.position.x + this.height /2
-        }
-    }
-    draw() {
-        c.fillStyle = 'purple'
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
-    }
-
-    update() {
-        this.draw()
-
-        const waypoint = waypoints[this.waypointIndex];
-        const yDistance = waypoint.y - this.center.y;  // y distance must be first
-        const xDistance = waypoint.x - this.center.x
-        const angle = Math.atan2(yDistance, xDistance)
-        this.position.x += Math.cos(angle)
-        this.position.y += Math.sin(angle)
-        this.center = {
-            x: this.position.x + this.width / 2,
-            y: this.position.y + this.height / 2 // the /2 operator gets the waypoints of the center of the square, rather than where it was drawn
-        }
-        
-        if (
-            Math.round(this.center.x) === Math.round(waypoint.x) &&
-            Math.round(this.center.y) === Math.round(waypoint.y) &&
-            this.waypointIndex < waypoints.length - 1
-          ) {
-            this.waypointIndex++
-          }
-        }
-      }
-
-/* animation */
+            /* animation */
 const enemyArr = [];
 
 for (let i = 1; i < 11; i++) {
@@ -62,12 +43,23 @@ for (let i = 1; i < 11; i++) {
        
     }))
 }
-
+const mouse = {
+    x: undefined,
+    y: undefined
+}
 function animate() {
+
     requestAnimationFrame (animate)
     c.drawImage(image, 0, 0)
     enemyArr.forEach((enemy) => {
         enemy.update()
     })
+    placementTiles.forEach((tile) => {
+        tile.update(mouse)
+    })
+
 }
-// 
+window.addEventListener('mousemove', (event) => {
+    mouse.x = event.clientX
+    mouse.y = event.clientY
+})
