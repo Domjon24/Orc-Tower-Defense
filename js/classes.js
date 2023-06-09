@@ -15,10 +15,8 @@ class Enemy {
         c.fillStyle = 'purple'
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
     }
-
     update() {
         this.draw()
-
         const waypoint = waypoints[this.waypointIndex];
         const yDistance = waypoint.y - this.center.y;  // y distance must be first
         const xDistance = waypoint.x - this.center.x
@@ -40,6 +38,7 @@ class Enemy {
         }
       }
 
+
 class PlacementTilesClass {
     constructor({ position = { x: 0, y: 0 }}) {
         this.position = position
@@ -59,6 +58,20 @@ class PlacementTilesClass {
             mouse.y < this.position.y + this.size
           ) {
             console.log('colliding')
-        }
-    }         
+            this.color = 'white'
+        } 
+            else this.color = 'rgba(255, 255, 255, .15)'
+        }         
+    }
+
+class Building {
+    constructor({ position = { x: 0, y: 0 } }) {
+        this.position = position
+        this.width = 64 * 2
+    }
+    
+    draw() {
+        c.fillStyle = 'blue'
+        c.fillRect(this.position.x, this.position.y, this.width, 64)
+    }
     }

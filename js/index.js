@@ -47,8 +47,11 @@ const mouse = {
     x: undefined,
     y: undefined
 }
-function animate() {
 
+const buildings = [];
+let activeTile = undefined;
+
+function animate() {
     requestAnimationFrame (animate)
     c.drawImage(image, 0, 0)
     enemyArr.forEach((enemy) => {
@@ -57,9 +60,39 @@ function animate() {
     placementTiles.forEach((tile) => {
         tile.update(mouse)
     })
-
+    buildings.forEach((building) => {
+        building.draw()
+    });
 }
-window.addEventListener('mousemove', (event) => {
-    mouse.x = event.clientX
+
+canvas.addEventListener('click', (event) => {
+    if (activeTile) {
+        buildings.push(
+            new Building({
+                position: {
+                    x: activeTile.position.x,
+                    y: activeTile.position.y
+                }
+            })
+        )
+    }
+})
+
+window.addEventListener('mousemove', (event) => {   //building mouse click
+    mouse.x = event.clientX 
     mouse.y = event.clientY
+    activeTile = null
+
+        for(let i = 0; i < placementTiles.length; i++) {
+            const tile = placementTiles[i]
+            if (
+                mouse.x > tile.position.x &&
+                mouse.x < tile.position.x + tile.size &&
+                mouse.y > tile.position.y &&
+                mouse.y < tile.position.y + tile.size ) {
+                    activeTile = tile
+                    break
+                    }
+        }
+    console.log(activeTile)
 })
