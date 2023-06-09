@@ -67,7 +67,7 @@ class PlacementTilesClass {
 class Building {
     constructor({ position = { x: 0, y: 0 } }) {
         this.position = position
-        this.width = 64 * 2
+        this.width = 64 
     }
     
     draw() {
